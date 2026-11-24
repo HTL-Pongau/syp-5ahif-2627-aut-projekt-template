@@ -16,11 +16,11 @@ tags:
 # 📄 Projektauftrag — Raspberry Pi per Ansible deployen
 
 > [!abstract] Merksatz
-> Du bekommst einen **Raspberry Pi**, überlegst dir ein Projekt (Webserver, Werbeblocker, Dashboard, Backup …) und setzt es **vollständig per Ansible** auf — von der frischen SD-Karte bis zum laufenden Dienst. Abgabe: dieser git push + Doku + **Live-Demo mit Erklärung**. KI ist erlaubt, muss aber deklariert und erklärbar sein (Tracks, Abschnitt 5).
+> Du bekommst einen **Raspberry Pi**, überlegst dir ein Projekt (Webserver, Werbeblocker, Dashboard, Backup …) und setzt es **vollständig per Ansible** auf — von der frischen SD-Karte bis zum laufenden Dienst. Abgabe: dieser git push + Doku + **Live-Demo mit Erklärung**. KI ist erlaubt, muss aber deklariert und erklärbar sein (Tracks, Abschnitt 5). **Sicherheit (SD)** ist Pflichtbestandteil des deployten Projekts (Abschnitt 3).
 
 ## 1. Idee & Proposal (Pflicht vor Start)
 
-**1 Seite:** Idee, Zielzustand, Dienste, geplante Ansible-Features (Role, Vault, …), Risiken. Ich genehmige — dann startest du.
+**1 Seite:** Idee, Zielzustand, Dienste, geplante Ansible-Features (Role, Vault, …), Risiken — inkl. kurzer Risiko-Einschätzung zu Sicherheit (was ist exponiert?). Ich genehmige — dann startest du.
 Ideen: persönlicher Webserver (nginx) · Werbeblocker (Pi-hole) · Dashboard (Homer) · Backup-Ziel (rsync) · Mediabox (Kodi) · Pi-Monitoring — oder eigene Idee.
 
 ## 2. Setup
@@ -50,6 +50,7 @@ host_key_checking = False   # nur im Schulnetz!
 > - [ ] `site.yml` deployt alles; **mindestens eine Role**
 > - [ ] **Vault** für mind. ein Secret — im Repo nur verschlüsselt
 > - [ ] Idempotenz-Nachweis: zweiter Lauf `changed=0`
+> - [ ] **Sicherheit (SD)** umgesetzt und erklärbar (Kasten unten)
 > - [ ] README (Struktur, Setup, Troubleshooting)
 > - [ ] Track-Artefakt ausgefüllt: [[02_KI_Nutzungsprotokoll]]
 > - [ ] Live-Demo 10 Min. + Erklärungsgespräch
@@ -68,6 +69,13 @@ mein-projekt/            # z. B. als Ordner ansible/ in diesem Repo
 └── README.md
 ```
 
+> [!info] Sicherheit (SD) — im deployten Projekt mitdenken
+> - **SSH härten:** Key-only (`PasswordAuthentication no`, `PermitRootLogin no`), Rechte per `become` — nie root-Login
+> - **Firewall (ufw):** nur die Ports, die dein Dienst wirklich braucht
+> - **Secrets nur im Vault** — nie Klartext im Repo
+> - **Least Privilege:** Dienst läuft unter eigenem User, keine `777`-Rechte
+> - **Updates:** Sicherheits-Updates automatisiert (z. B. `unattended-upgrades`)
+
 ## 4. Erklären können (Demo-Gespräch)
 
 | Feature | Konkret an deinem Projekt |
@@ -75,6 +83,7 @@ mein-projekt/            # z. B. als Ordner ansible/ in diesem Repo
 | **Role** | Aufbau `roles/`, Einbindung in `site.yml` |
 | **Vault** | Verschlüsselung, `--ask-vault-pass`, warum kein Klartext im Repo |
 | **+1 Wahl:** Handler/`notify` · Template (Jinja2) · `when`/Facts · `--tags` · Loops | eigenes Beispiel |
+| **Sicherheit (SD)** | 1–2 Maßnahmen aus dem Kasten oben — warum genau diese? |
 
 ## 5. KI: zwei Tracks (wähle einen)
 
@@ -90,7 +99,7 @@ Kernanforderungen identisch. Regeln (immer): **keine Secrets, personenbezogenen 
 |---|---|
 | KW49 Di 01.12. | M1 Proposal genehmigt |
 | KW49 Do 03.12. | M2 Pi im Inventory, erster Playbook-Lauf grün |
-| KW50 Di 08.12. | M3 Role + Vault stehen, Playbook läuft durch |
+| KW50 Di 08.12. | M3 Role + Vault + erste Sicherheitsmaßnahmen stehen, Playbook läuft durch |
 | KW51 Di 15.12. | M4 fertig (Idempotenz-Nachweis, README, Artefakt); **Abgabe: letzter `git push`** auf dieses Repo bis 23:59 Uhr |
 | KW51 Do 17.12. (+ KW52) | M5 **Live-Demo** 10 Min.: frischer Pi → `ansible-playbook site.yml --ask-vault-pass` → Dienst läuft → 2. Lauf `changed=0` → Fragen (Katalog: [[01_Beurteilungskriterien]]) |
 
