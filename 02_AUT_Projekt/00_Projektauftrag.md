@@ -25,7 +25,7 @@ Ideen: persönlicher Webserver (nginx) · Werbeblocker (Pi-hole) · Dashboard (H
 
 ## 2. Setup
 
-- **Managed Node:** dein Pi (Raspberry Pi OS Lite; Image von mir vorbereitet: SSH an, eigener User, kein Passwort-Login)
+- **Managed Node:** dein Pi (Raspberry Pi OS Lite — **Image selbst vorbereiten**: Raspberry Pi Imager → OS Lite, SSH aktivieren, eigenen User anlegen; ohne vorkonfigurierten User klappt der erste SSH-Login nicht)
 - **Control Node:** EDV-Raum-PC oder Laptop (wie im Docker-Lab, AUT#1)
 - **Zugriff:** Ed25519-Key aus AUT#1 per `ssh-copy-id`, `~/.ssh/config`; **kein root-Login** — `become` (wie Ubuntu im Lab)
 
